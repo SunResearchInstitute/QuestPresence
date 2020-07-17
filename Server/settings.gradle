@@ -1,0 +1,2 @@
+rootProject.name='QuestPresence'
+include ':app'
