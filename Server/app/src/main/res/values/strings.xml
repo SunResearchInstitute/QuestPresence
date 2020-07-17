@@ -3,4 +3,5 @@
     <string name="start_btn">Start Presence</string>
     <string name="stop_btn">Stop Presence</string>
     <string name="plchdr">plchdr</string>
+    <string name="exit_btn">Exit</string>
 </resources>

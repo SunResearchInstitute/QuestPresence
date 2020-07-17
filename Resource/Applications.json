@@ -3,7 +3,8 @@
     "com.beatgames.beatsaber" : "Beat Saber",
     "com.weloveoculus.BMBF" : "BMBF",
     "com.LiminalVR.Liminal" : "Liminal",
-    "com.netflix.ninja.vr" : "Nextflix VR",
+    "com.netflix.ninja.vr" : "Netflix VR",
     "com.yur.fitquest" : "YUR Fitness",
-    "net.sunthecourier.questpresence": "Quest Presence"
+    "net.sunthecourier.questpresence": "Main Menu",
+	"com.oculus.vrshell" : "Main Menu"
 }

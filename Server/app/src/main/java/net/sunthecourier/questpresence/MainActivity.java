@@ -45,6 +45,10 @@ public class MainActivity extends AppCompatActivity {
 		}
 	}
 
+	public void onExitClick(View view) {
+		System.exit(0);
+	}
+
 	void requestUsageStatsPermission() {
 		if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
 				&& !hasUsageStatsPermission(this)) {
