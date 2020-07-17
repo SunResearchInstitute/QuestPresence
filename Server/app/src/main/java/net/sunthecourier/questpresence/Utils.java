@@ -1,17 +1,15 @@
 package net.sunthecourier.questpresence;
 
-import android.app.ActivityManager;
-import android.content.Context;
-import androidx.core.content.ContextCompat;
-import com.rvalerio.fgchecker.AppChecker;
+import android.os.AsyncTask;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-//import org.apache.http.conn.util.InetAddressUtils;
+import java.util.Scanner;
 
 public class Utils {
 	/**
@@ -47,5 +45,13 @@ public class Utils {
 		}
 		catch (Exception ignored) { } // for now eat exceptions
 		return "null";
+	}
+
+	public static String readStringFromURL(String requestURL) throws IOException {
+		try (Scanner scanner = new Scanner(new URL(requestURL).openStream(),
+				StandardCharsets.UTF_8.toString())) {
+			scanner.useDelimiter("\\A");
+			return scanner.hasNext() ? scanner.next() : "";
+		}
 	}
 }

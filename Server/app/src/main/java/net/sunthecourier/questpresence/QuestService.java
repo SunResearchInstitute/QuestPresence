@@ -6,29 +6,44 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.os.PowerManager;
 import androidx.annotation.Nullable;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.rvalerio.fgchecker.AppChecker;
-import lombok.Getter;
+import lombok.SneakyThrows;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 public class QuestService extends Service {
-	@Getter private static boolean isRunning = false;
 	private Thread thread;
-	SocketSender sender;
+	private SocketSender sender;
+	private HashMap<String, String> appDictionary;
+
 
 	@Nullable @Override public IBinder onBind(Intent intent) {
 		return null;
 	}
 
-	@Override
+	@SneakyThrows @Override
 	public void onCreate() {
-		isRunning = true;
 		try {
 			sender = new SocketSender();
 		}
 		catch (IOException e) {
 			e.printStackTrace();
 		}
+		Gson gson = new Gson();
+		Thread tthread = new Thread(() -> {
+			try {
+				String content = Utils.readStringFromURL("https://raw.githubusercontent.com/Sun-Research-University/QuestPresence/master/Resource/Applications.json");
+				appDictionary = gson.fromJson(content, new TypeToken<HashMap<String, String>>() {}.getType());
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+		});
+		tthread.start();
+		tthread.join();
 
 		thread = new Thread(() -> {
 			while (true) {
@@ -37,7 +52,7 @@ public class QuestService extends Service {
 					if (pm.isInteractive()) {
 						String str = getAppName();
 
-						sender.SendData(str);
+						sender.SendData(str, appDictionary);
 						System.out.println(str);
 					}
 					Thread.sleep(1000);
@@ -51,7 +66,6 @@ public class QuestService extends Service {
 	}
 
 	@Override public void onDestroy() {
-		isRunning = false;
 		thread.interrupt();
 
 		try {
