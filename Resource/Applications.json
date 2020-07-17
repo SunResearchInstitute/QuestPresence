@@ -1,10 +1,14 @@
 {
-    "com.TriangleFactory.HyperDash" : "Playing Hyper Dash",
-    "com.beatgames.beatsaber" : "Playing Beat Saber",
-    "com.weloveoculus.BMBF" : "Taking a look at BMBF",
-    "com.LiminalVR.Liminal" : "Playing Liminal",
-    "com.netflix.ninja.vr" : "Watching Netflix VR",
-    "com.yur.fitquest" : "Taking a look at YUR Fitness",
-    "net.sunthecourier.questpresence": "On the Main Menu",
-	"com.oculus.vrshell" : "On the Main Menu"
+    "net.sunthecourier.questpresence": {
+        "Prefixure": "On the",
+        "CustomName": "Main Menu"
+    },
+    "com.oculus.vrshell": {
+        "Prefixure": "On the",
+        "CustomName": "Main Menu"
+    },
+    "com.netflix.ninja.vr": {
+        "Prefixure": "Watching",
+        "CustomName": "Netflix"
+    }
 }
