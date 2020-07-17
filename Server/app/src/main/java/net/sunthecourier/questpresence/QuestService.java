@@ -6,19 +6,14 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.os.PowerManager;
 import androidx.annotation.Nullable;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.rvalerio.fgchecker.AppChecker;
 import lombok.SneakyThrows;
 
 import java.io.IOException;
-import java.util.HashMap;
 
 public class QuestService extends Service {
 	private Thread thread;
 	private SocketSender sender;
-	private HashMap<String, String> appDictionary;
-
 
 	@Nullable @Override public IBinder onBind(Intent intent) {
 		return null;
@@ -32,33 +27,22 @@ public class QuestService extends Service {
 		catch (IOException e) {
 			e.printStackTrace();
 		}
-		Gson gson = new Gson();
-		Thread tthread = new Thread(() -> {
-			try {
-				String content = Utils.readStringFromURL("https://raw.githubusercontent.com/Sun-Research-University/QuestPresence/master/Resource/Applications.json");
-				appDictionary = gson.fromJson(content, new TypeToken<HashMap<String, String>>() {}.getType());
-			}
-			catch (IOException e) {
-				e.printStackTrace();
-			}
-		});
-		tthread.start();
-		tthread.join();
 
 		thread = new Thread(() -> {
-			while (true) {
+			while (!Thread.interrupted()) {
 				try {
-					PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+					final PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 					if (pm.isInteractive()) {
-						String str = getAppName();
+						String str = Utils.getAppNameFromPkgName(getBaseContext(), getPkgName());
 
-						sender.SendData(str, appDictionary);
+						sender.SendData(str);
 						System.out.println(str);
 					}
 					Thread.sleep(1000);
 				}
 				catch (InterruptedException | IOException e) {
-					break;
+					if (!Thread.interrupted())
+						break;
 				}
 			}
 		});
@@ -76,7 +60,7 @@ public class QuestService extends Service {
 		}
 	}
 
-	public String getAppName() {
+	private String getPkgName() {
 		return new AppChecker().getForegroundApp(this.getBaseContext());
 	}
 }

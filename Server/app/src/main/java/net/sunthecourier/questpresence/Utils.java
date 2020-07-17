@@ -1,13 +1,13 @@
 package net.sunthecourier.questpresence;
 
-import java.io.IOException;
+import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+
 import java.net.InetAddress;
 import java.net.NetworkInterface;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
-import java.util.Scanner;
 
 public class Utils {
 	/**
@@ -45,11 +45,14 @@ public class Utils {
 		return "null";
 	}
 
-	public static String readStringFromURL(String requestURL) throws IOException {
-		try (Scanner scanner = new Scanner(new URL(requestURL).openStream(),
-				StandardCharsets.UTF_8.toString())) {
-			scanner.useDelimiter("\\A");
-			return scanner.hasNext() ? scanner.next() : "";
+	public static String getAppNameFromPkgName(Context context, String packageName) {
+		try {
+			final PackageManager packageManager = context.getPackageManager();
+			ApplicationInfo info = packageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA);
+			return (String) packageManager.getApplicationLabel(info);
+		}
+		catch (PackageManager.NameNotFoundException e) {
+			return packageName.substring(packageName.lastIndexOf(".") + 1);
 		}
 	}
 }

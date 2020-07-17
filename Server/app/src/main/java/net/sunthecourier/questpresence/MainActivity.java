@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
 		final Button mainBtn = findViewById(R.id.presence_btn);
 		final TextView ipBox = findViewById(R.id.ipBox);
 		ipBox.setText(Utils.getIPAddress(true));
-		if (isMyServiceRunning(QuestService.class)) {
+		if (isMyServiceRunning()) {
 			mainBtn.setText(R.string.stop_btn);
 		}
 		else {
@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
 	public void onClick(View view) {
 		Intent intent = new Intent(MainActivity.this, QuestService.class);
 		final Button mainBtn = findViewById(R.id.presence_btn);
-		if (!isMyServiceRunning(QuestService.class)) {
+		if (!isMyServiceRunning()) {
 			startService(intent);
 			mainBtn.setText(R.string.stop_btn);
 		}
@@ -64,10 +64,10 @@ public class MainActivity extends AppCompatActivity {
 		return mode == AppOpsManager.MODE_ALLOWED;
 	}
 
-	private boolean isMyServiceRunning(Class<?> serviceClass) {
+	private boolean isMyServiceRunning() {
 		ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
 		for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-			if (serviceClass.getName().equals(service.service.getClassName())) {
+			if (QuestService.class.getName().equals(service.service.getClassName())) {
 				return true;
 			}
 		}
