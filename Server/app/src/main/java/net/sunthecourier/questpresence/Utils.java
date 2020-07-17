@@ -1,7 +1,5 @@
 package net.sunthecourier.questpresence;
 
-import android.os.AsyncTask;
-
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
