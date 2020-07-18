@@ -3,6 +3,7 @@ package net.sunthecourier.questpresence;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
 import androidx.annotation.Nullable;
@@ -12,8 +13,11 @@ import lombok.SneakyThrows;
 import java.io.IOException;
 
 public class QuestService extends Service {
-	private Thread thread;
+	//private Thread thread;
 	private SocketSender sender;
+
+	public Handler handler = null;
+	public static Runnable runnable = null;
 
 	@Nullable @Override public IBinder onBind(Intent intent) {
 		return null;
@@ -28,6 +32,35 @@ public class QuestService extends Service {
 			e.printStackTrace();
 		}
 
+		handler = new Handler();
+		runnable = () -> {
+			final PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+			if (pm.isInteractive()) {
+				String str = Utils.getAppNameFromPkgName(getBaseContext(), getPkgName());
+				Thread thread = new Thread(() -> {
+					try {
+						sender.SendData(str);
+					}
+					catch (IOException e) {
+						e.printStackTrace();
+					}
+				});
+				thread.start();
+				try {
+					thread.join();
+				}
+				catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+
+				System.out.println(str);
+			}
+			if (runnable != null)
+				handler.postDelayed(runnable, 1000);
+		};
+
+		handler.postDelayed(runnable, 1000);
+		/*
 		thread = new Thread(() -> {
 			while (!Thread.interrupted()) {
 				try {
@@ -47,10 +80,11 @@ public class QuestService extends Service {
 			}
 		});
 		thread.start();
+		 */
 	}
 
 	@Override public void onDestroy() {
-		thread.interrupt();
+		//thread.interrupt();
 
 		try {
 			sender.clean();
@@ -58,6 +92,7 @@ public class QuestService extends Service {
 		catch (IOException e) {
 			e.printStackTrace();
 		}
+		super.onDestroy();
 	}
 
 	private String getPkgName() {

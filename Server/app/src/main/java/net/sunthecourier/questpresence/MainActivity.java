@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
 		final Button mainBtn = findViewById(R.id.presence_btn);
 		final TextView ipBox = findViewById(R.id.ipBox);
 		ipBox.setText(Utils.getIPAddress(true));
-		if (isMyServiceRunning()) {
+		if (QuestService.runnable != null) {
 			mainBtn.setText(R.string.stop_btn);
 		}
 		else {
@@ -35,12 +35,13 @@ public class MainActivity extends AppCompatActivity {
 	public void onClick(View view) {
 		Intent intent = new Intent(MainActivity.this, QuestService.class);
 		final Button mainBtn = findViewById(R.id.presence_btn);
-		if (!isMyServiceRunning()) {
+		if (QuestService.runnable == null) {
 			startService(intent);
 			mainBtn.setText(R.string.stop_btn);
 		}
 		else {
-			stopService(intent);
+			//stopService(intent);
+			QuestService.runnable = null;
 			mainBtn.setText(R.string.start_btn);
 		}
 	}
