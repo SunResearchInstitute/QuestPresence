@@ -1,14 +1,12 @@
 {
     "QuestPresence": {
         "Prefixure": "On the",
-        "CustomName": "Main Menu"
+        "CustomName": "Main Menu",
+        "CustomKey": null
     },
-    "com.oculus.vrshell": {
+    "Oculus App Runtime": {
         "Prefixure": "On the",
-        "CustomName": "Main Menu"
-    },
-    "com.netflix.ninja.vr": {
-        "Prefixure": "Watching",
-        "CustomName": "Netflix"
+        "CustomName": "Main Menu",
+        "CustomKey": null
     }
 }

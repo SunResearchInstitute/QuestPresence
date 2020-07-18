@@ -46,12 +46,6 @@ public class QuestService extends Service {
 					}
 				});
 				thread.start();
-				try {
-					thread.join();
-				}
-				catch (InterruptedException e) {
-					e.printStackTrace();
-				}
 
 				System.out.println(str);
 			}
