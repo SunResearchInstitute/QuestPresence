@@ -6,7 +6,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 
 public class SocketSender {
 	ServerSocket socket;
@@ -17,7 +16,7 @@ public class SocketSender {
 		socket.setReuseAddress(true);
 	}
 
-	public void SendData(String app, HashMap<String, String> map) throws IOException {
+	public void SendData(String app) throws IOException {
 		if (connection == null || connection.isClosed()) {
 			if (socket.isClosed()) {
 				socket = new ServerSocket(0xCAFE);
@@ -30,17 +29,10 @@ public class SocketSender {
 		try {
 			OutputStream stream = connection.getOutputStream();
 
-			byte[] name = new byte[512];
-			String str = app;
-			if (map.containsKey(app)) {
-				str = map.get(app);
-			}
-			else {
-				str = str.substring(str.lastIndexOf(".") + 1);
-			}
-			assert str != null;
-			byte[] chars = str.getBytes(StandardCharsets.UTF_8);
-			for (int i = 0; i < 512; i++) {
+			//assemble a UTF8 byte array with 0s at the end
+			byte[] name = new byte[612];
+			byte[] chars = app.getBytes(StandardCharsets.UTF_8);
+			for (int i = 0; i < name.length; i++) {
 				if (chars.length > i) {
 					name[i] = chars[i];
 				}
@@ -48,7 +40,7 @@ public class SocketSender {
 					name[i] = 0;
 				}
 			}
-
+			
 			stream.write(new byte[]{0x23, (byte) 0xdd, (byte) 0xaa, (byte) 0xff, 0x00, 0x00, 0x00, 0x00}); // magic
 			stream.write(new byte[]{0x23, (byte) 0xdd, (byte) 0xaa, (byte) 0xff, 0x00, 0x00, 0x00, 0x00}); //tid but we're not using it here
 			stream.write(name);
@@ -56,7 +48,6 @@ public class SocketSender {
 		}
 		catch (SocketException e) {
 			connection.close();
-
 		}
 	}
 
