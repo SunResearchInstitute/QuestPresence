@@ -77,18 +77,6 @@ public class QuestService extends Service {
 		 */
 	}
 
-	@Override public void onDestroy() {
-		//thread.interrupt();
-
-		try {
-			sender.clean();
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-		super.onDestroy();
-	}
-
 	private String getPkgName() {
 		return new AppChecker().getForegroundApp(this.getBaseContext());
 	}

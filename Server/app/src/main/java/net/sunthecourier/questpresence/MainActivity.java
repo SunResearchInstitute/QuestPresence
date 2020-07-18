@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Process;
 import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
@@ -35,19 +36,27 @@ public class MainActivity extends AppCompatActivity {
 	public void onClick(View view) {
 		Intent intent = new Intent(MainActivity.this, QuestService.class);
 		final Button mainBtn = findViewById(R.id.presence_btn);
+		final TextView text = findViewById(R.id.statusBox);
 		if (QuestService.runnable == null) {
 			startService(intent);
 			mainBtn.setText(R.string.stop_btn);
+			text.setText(R.string.start_action);
 		}
 		else {
-			//stopService(intent);
 			QuestService.runnable = null;
+			stopService(intent);
 			mainBtn.setText(R.string.start_btn);
+			text.setText(R.string.exit_action);
 		}
-	}
-
-	public void onExitClick(View view) {
-		System.exit(0);
+		new Thread(() -> {
+			try {
+				Thread.sleep(1200);
+			}
+			catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			android.os.Process.sendSignal(android.os.Process.myPid(), Process.SIGNAL_KILL);
+		}).start();
 	}
 
 	void requestUsageStatsPermission() {

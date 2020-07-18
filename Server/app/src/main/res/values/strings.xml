@@ -3,5 +3,7 @@
     <string name="start_btn">Start Presence</string>
     <string name="stop_btn">Stop Presence</string>
     <string name="plchdr">plchdr</string>
-    <string name="exit_btn">Exit</string>
+    <string name="exit_action">Stopping server, now exiting!</string>
+    <string name="start_action">Starting server, now exiting!</string>
+    <string name="wait">Waiting for input!</string>
 </resources>
