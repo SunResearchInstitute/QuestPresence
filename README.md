@@ -2,6 +2,9 @@
 Based off of [SwitchPresence](https://github.com/Sun-Research-University/SwitchPresence-Rewritten), you can install QuestPresence to display your VR games in discord.
 
 # Install
-It is recommended to install through [SideQuest](https://sidequestvr.com/setup-howto) by manually installing the APK.<br><br>
+You can install QuestPresence through [SideQuest appstore](https://sdq.st/a/1356)!<br>
 
-At the time of writing this application is not released on the sidequest store page but we hoping to put it out there soon:tm:.
+You will also need to install [PresenceClient](https://github.com/Sun-Research-University/PresenceClient/blob/master/README.md#setup)
+
+# Support
+If you still need further asstiance you can find us on [Discord](https://link.sunthecourier.net/discord)!
