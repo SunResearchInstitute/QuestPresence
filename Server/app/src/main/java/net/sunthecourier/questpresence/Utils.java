@@ -42,7 +42,7 @@ public class Utils {
 			}
 		}
 		catch (Exception ignored) { } // for now eat exceptions
-		return "null";
+		return "Reload app!";
 	}
 
 	public static String getAppNameFromPkgName(Context context, String packageName) {

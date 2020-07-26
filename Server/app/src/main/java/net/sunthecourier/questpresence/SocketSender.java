@@ -50,13 +50,4 @@ public class SocketSender {
 			connection.close();
 		}
 	}
-
-	public void clean() throws IOException {
-		if (connection != null && !connection.isClosed()) {
-			connection.close();
-		}
-		if (socket != null && !socket.isClosed()) {
-			socket.close();
-		}
-	}
 }

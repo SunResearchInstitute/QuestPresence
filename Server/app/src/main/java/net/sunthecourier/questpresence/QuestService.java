@@ -13,7 +13,6 @@ import lombok.SneakyThrows;
 import java.io.IOException;
 
 public class QuestService extends Service {
-	//private Thread thread;
 	private SocketSender sender;
 
 	public Handler handler = null;
@@ -34,10 +33,11 @@ public class QuestService extends Service {
 
 		handler = new Handler();
 		runnable = () -> {
+			Thread thread = null;
 			final PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 			if (pm.isInteractive()) {
 				String str = Utils.getAppNameFromPkgName(getBaseContext(), getPkgName());
-				Thread thread = new Thread(() -> {
+				thread = new Thread(() -> {
 					try {
 						sender.SendData(str);
 					}
@@ -46,35 +46,25 @@ public class QuestService extends Service {
 					}
 				});
 				thread.start();
-
-				System.out.println(str);
 			}
-			if (runnable != null)
-				handler.postDelayed(runnable, 1000);
+
+			Thread finalThread = thread;
+			new Thread(() -> {
+				if (finalThread != null) {
+					try {
+						finalThread.wait();
+					}
+					catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+
+				if (runnable != null)
+					handler.postDelayed(runnable, 1000);
+			}).start();
 		};
 
 		handler.postDelayed(runnable, 1000);
-		/*
-		thread = new Thread(() -> {
-			while (!Thread.interrupted()) {
-				try {
-					final PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-					if (pm.isInteractive()) {
-						String str = Utils.getAppNameFromPkgName(getBaseContext(), getPkgName());
-
-						sender.SendData(str);
-						System.out.println(str);
-					}
-					Thread.sleep(1000);
-				}
-				catch (InterruptedException | IOException e) {
-					if (!Thread.interrupted())
-						break;
-				}
-			}
-		});
-		thread.start();
-		 */
 	}
 
 	private String getPkgName() {
